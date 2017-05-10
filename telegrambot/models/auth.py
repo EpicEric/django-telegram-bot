@@ -28,6 +28,9 @@ class AuthToken(models.Model):
         verbose_name = _('Authentication Token')
         verbose_name_plural = _('Authentications Tokens')
 
+    def get_login_url(self, bot):
+        return "https://telegram.me/{}?start={}".format(bot.user_api.username, self.key)
+
     @classmethod
     def get_for_user(cls, user):
         try:

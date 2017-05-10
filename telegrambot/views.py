@@ -39,8 +39,9 @@ class AuthView(generic.TemplateView):
 
     def get_context_data(self, **kwargs):
         ctx = super(AuthView, self).get_context_data(**kwargs)
-        ctx['bot'] = self.get_bot(self.kwargs['bot'])
-        ctx['token'] = self.get_token(self.request.user)
+        bot = self.get_bot(self.kwargs['bot'])
+        ctx['bot'] = bot
+        ctx['login_url'] = self.get_token(self.request.user).get_login_url(bot)
         return ctx
 
     def get_bot(self, name):

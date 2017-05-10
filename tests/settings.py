@@ -46,14 +46,14 @@ LOGGING = {
             'class': 'logging.StreamHandler',
             'formatter': 'verbose'
         },
-    },     
+    },
     'loggers': {
         'telegrambot.views': {
             'handlers': ['console'],
             'propagate': False,
             'level': 'DEBUG',
         },
-    }   
+    }
 }
 
 TEMPLATES = [

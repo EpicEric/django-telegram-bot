@@ -9,16 +9,16 @@ PY3 = sys.version_info > (3,)
 
 class TemplateCommandView(object):
     template_text = None
-    template_keyboard = None    
-    
+    template_keyboard = None
+
     def get_context(self, bot, update, **kwargs):
-        return None    
+        return None
 
     def handle(self, bot, update, **kwargs):
         try:
             ctx = self.get_context(bot, update, **kwargs)
             text = TextResponse(self.template_text, ctx).render()
-            keyboard = KeyboardResponse(self.template_keyboard, ctx).render()       
+            keyboard = KeyboardResponse(self.template_keyboard, ctx).render()
 #             logger.debug("Text:" + str(text.encode('utf-8')))
 #             logger.debug("Keyboard:" + str(keyboard))
             if text:

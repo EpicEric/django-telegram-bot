@@ -6,10 +6,10 @@ class HandlerNotFound(Exception):
 
 
 class HandlerResolver(object):
-    
+
     def __init__(self, conf):
         self.resolver = RegexURLResolver(r'^', conf)
-        
+
     def resolve(self, update):
         try:
             resolver_match = self.resolver.resolve(update.message.text)

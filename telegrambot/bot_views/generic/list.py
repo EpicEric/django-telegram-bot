@@ -8,7 +8,7 @@ class ListCommandView(TemplateCommandView):
     context_object_name = None
     model = None
     ordering = None
-    
+
     def get_queryset(self):
         if self.queryset is not None:
             queryset = self.queryset
@@ -30,13 +30,13 @@ class ListCommandView(TemplateCommandView):
                 ordering = (ordering,)
             queryset = queryset.order_by(*ordering)
         return queryset
-    
+
     def get_ordering(self):
         """
         Return the field or fields to use for ordering the queryset.
         """
         return self.ordering
-    
+
     def get_context(self, bot, update, **kwargs):
         object_list = self.get_queryset()
         context = {'object_list': object_list}

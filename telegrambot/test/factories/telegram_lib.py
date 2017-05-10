@@ -30,7 +30,7 @@ class MessageLibFactory(Factory):
     from_user = SubFactory(UserLibFactory)
     date = timezone.now()
     chat = SubFactory(ChatLibFactory)
-    text = FuzzyText()    
+    text = FuzzyText()
 
 class UpdateLibFactory(Factory):
     class Meta:

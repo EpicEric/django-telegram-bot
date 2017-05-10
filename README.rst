@@ -6,13 +6,13 @@ CI:
 .. image:: https://travis-ci.org/jlmadurga/django-telegram-bot.svg?branch=master
     :target: https://travis-ci.org/jlmadurga/django-telegram-bot
 
-.. image:: https://coveralls.io/repos/github/jlmadurga/django-telegram-bot/badge.svg?branch=master 
+.. image:: https://coveralls.io/repos/github/jlmadurga/django-telegram-bot/badge.svg?branch=master
 	:target: https://coveralls.io/github/jlmadurga/django-telegram-bot?branch=master
-  
+
 .. image:: https://requires.io/github/jlmadurga/django-telegram-bot/requirements.svg?branch=master
      :target: https://requires.io/github/jlmadurga/django-telegram-bot/requirements/?branch=master
      :alt: Requirements Status
-     
+
 PyPI:
 
 
@@ -44,11 +44,11 @@ Quickstart
 Install django-telegram-bot::
 
     pip install django-telegram-bot
-    
+
 Add ``telegrambot`` and ``rest_framework`` to your ``INSTALLED_APPS``, and run::
 
 	$ python manage.py migrate
-	
+
 
 After creating a bot in Telegram Platform, create at least one bot with django admin. Token is the only
 required field. You may need to provided public key certificate for your server. https://core.telegram.org/bots/self-signed
@@ -56,14 +56,14 @@ Heroku has https and ssl by default so it is a good option if you dont want to d
 
 Add webhook url to your urlpatterns::
 
-	url(r'^telegrambot/', include('telegrambot.urls', namespace="telegrambot")),	
+	url(r'^telegrambot/', include('telegrambot.urls', namespace="telegrambot")),
 
 Define the file where commands will be defined in ``urlpatterns`` variable, analogue to django ``urls``
 and ``ROOT_URLCONF``::
 
 	TELEGRAM_BOT_HANDLERS_CONF = "app.handlers"
-	
-Set bot commands handlers is very easy just as defining `urls` in django. Module with ``urlpatterns`` that list 
+
+Set bot commands handlers is very easy just as defining `urls` in django. Module with ``urlpatterns`` that list
 different handlers. You can `regex` directly or use shortcuts like `command` or `unknown_command` ::
 
 	urlpatterns = [command('start', StartView.as_command_view()),
@@ -74,12 +74,12 @@ different handlers. You can `regex` directly or use shortcuts like `command` or 
                    regex(r'author_(?P<name>\w+)', AuthorName.as_command_view()),
                   ]
 
-To set the webhook for telegram you need ``django.contrib.sites`` installed, ``SITE_ID`` configured 
-in settings and with it correct value in the DB. The webhook for each bot is set when a Bot is saved and 
+To set the webhook for telegram you need ``django.contrib.sites`` installed, ``SITE_ID`` configured
+in settings and with it correct value in the DB. The webhook for each bot is set when a Bot is saved and
 ``enabled`` field is set to true.
-	
+
 Bot views responses with Telegram messages to the user who send the command with a text message and keyboard.
-Compound with a context and a template. The way it is handled is analogue to Django views.  Visits docs for more 
+Compound with a context and a template. The way it is handled is analogue to Django views.  Visits docs for more
 details https://django-telegram-bot.readthedocs.io/en/latest/usage.html
 
 
@@ -89,7 +89,7 @@ Features
 * Multiple bots
 * Message handling definition.
 * Authentication
-* Text responses and keyboards. 
+* Text responses and keyboards.
 * Media messages not supported.
 * Only Markup parse mode.
 

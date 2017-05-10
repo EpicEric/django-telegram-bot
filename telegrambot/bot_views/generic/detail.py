@@ -6,17 +6,17 @@ class DetailCommandView(TemplateCommandView):
     model = None
     queryset = None
     context_object_name = None
-    slug_field = 'slug'    
-    
+    slug_field = 'slug'
+
     def __init__(self, slug=None):
         self.slug = slug
-    
+
     def get_slug_field(self, **kwargs):
         """
         Get the name of a slug field to be used to look up by slug.
         """
         return self.slug_field
-    
+
     def get_queryset(self):
         """
         Return the `QuerySet` that will be used to look up the object.
@@ -35,13 +35,13 @@ class DetailCommandView(TemplateCommandView):
                     }
                 )
         return self.queryset.all()
-    
+
     def get_slug(self, **kwargs):
         return self.slug
-    
+
     def get_context(self, bot, update, **kwargs):
         queryset = self.get_queryset()
-        if not self.slug_field: 
+        if not self.slug_field:
             raise AttributeError("Generic detail view %s must be called with "
                                  "a slug."
                                  % self.__class__.__name__)
@@ -54,7 +54,7 @@ class DetailCommandView(TemplateCommandView):
                 raise FieldError("Field %s not in valid. Review slug_field" % slug_field)
             except ObjectDoesNotExist:
                 object = None
-        else: 
+        else:
             object = None
         context = {'context_object_name': object}
         if self.context_object_name:

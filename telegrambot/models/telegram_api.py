@@ -42,7 +42,7 @@ class Chat(models.Model):
 
     def __str__(self):
         return "%s" % (self.title or self.username)
-    
+
     def is_authenticated(self):
         return hasattr(self, 'auth_token') and not self.auth_token.expired()
 
@@ -65,16 +65,16 @@ class Message(models.Model):
 
     def __str__(self):
         return "(%s,%s)" % (self.from_user, self.text or '(no text)')
-    
+
 class Update(models.Model):
-    
+
     update_id = models.BigIntegerField(_('Id'), primary_key=True)
-    message = models.ForeignKey(Message, null=True, blank=True, verbose_name=_('Message'), 
+    message = models.ForeignKey(Message, null=True, blank=True, verbose_name=_('Message'),
                                 related_name="updates")
-    
+
     class Meta:
         verbose_name = 'Update'
         verbose_name_plural = 'Updates'
-    
+
     def __str__(self):
-        return "%s" % self.update_id    
+        return "%s" % self.update_id

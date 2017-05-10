@@ -12,7 +12,7 @@ import traceback
 logger = logging.getLogger(__name__)
 
 class WebhookView(APIView):
-    
+
     def post(self, request, token):
         serializer = UpdateSerializer(data=request.data)
         if serializer.is_valid():
@@ -32,23 +32,23 @@ class WebhookView(APIView):
                 return Response(serializer.data, status=status.HTTP_200_OK)
         logger.error("Validation error: %s from message %s" % (serializer.errors, request.data))
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-    
-    
+
+
 class AuthView(generic.TemplateView):
     template_name = 'telegrambot/authentication.html'
-    
+
     def get_context_data(self, **kwargs):
         ctx = super(AuthView, self).get_context_data(**kwargs)
         ctx['bot'] = self.get_bot(self.kwargs['bot'])
         ctx['token'] = self.get_token(self.request.user)
         return ctx
-    
+
     def get_bot(self, name):
-        return Bot.objects.get(user_api__username=name)    
-    
+        return Bot.objects.get(user_api__username=name)
+
     def get_token(self, user):
         token, created = AuthToken.objects.get_or_create(user=user)
         if not created and token.expired():
             token.delete()
             token = AuthToken.objects.create(user=user)
-        return token    
+        return token

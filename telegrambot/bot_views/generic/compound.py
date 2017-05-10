@@ -3,7 +3,7 @@ from telegrambot.bot_views.generic.base import TemplateCommandView
 class ListDetailCommandView(TemplateCommandView):
     list_view_class = None
     detail_view_class = None
-    
+
     @classmethod
     def as_command_view(cls, **initkwargs):
         def view(bot, update, **kwargs):

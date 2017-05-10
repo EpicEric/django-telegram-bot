@@ -26,7 +26,7 @@ class AuthToken(models.Model):
 
     class Meta:
         verbose_name = _('Authentication Token')
-        verbose_name_plural = _('Authentications Tokens')  
+        verbose_name_plural = _('Authentications Tokens')
 
     def save(self, *args, **kwargs):
         if not self.key:
@@ -35,9 +35,9 @@ class AuthToken(models.Model):
 
     def generate_key(self):
         return binascii.hexlify(os.urandom(20)).decode()
-    
+
     def expired(self):
-        
+
         return self.created < now() - timedelta(hours=int(getattr(settings, 'TELEGRAM_BOT_TOKEN_EXPIRATION', '24')))
 
     def __str__(self):

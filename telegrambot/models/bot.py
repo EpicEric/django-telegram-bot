@@ -18,27 +18,27 @@ logger = logging.getLogger(__file__)
 @python_2_unicode_compatible
 class Bot(models.Model):
     token = models.CharField(_('Token'), max_length=100, db_index=True)
-    user_api = models.OneToOneField(User, verbose_name=_("Bot User"), related_name='bot', 
+    user_api = models.OneToOneField(User, verbose_name=_("Bot User"), related_name='bot',
                                     on_delete=models.CASCADE, blank=True, null=True)
-    ssl_certificate = models.FileField(_("SSL certificate"), upload_to='telegrambot/ssl/', 
+    ssl_certificate = models.FileField(_("SSL certificate"), upload_to='telegrambot/ssl/',
                                        blank=True, null=True)
     enabled = models.BooleanField(_('Enable'), default=True)
     created = models.DateTimeField(_('Date Created'), auto_now_add=True)
-    modified = models.DateTimeField(_('Date Modified'), auto_now=True)    
-    
+    modified = models.DateTimeField(_('Date Modified'), auto_now=True)
+
     class Meta:
         verbose_name = _('Bot')
-        verbose_name_plural = _('Bots')    
-    
+        verbose_name_plural = _('Bots')
+
     def __init__(self, *args, **kwargs):
         super(Bot, self).__init__(*args, **kwargs)
         self._bot = None
         if self.token:
             self._bot = BotAPI(self.token)
-            
+
     def __str__(self):
         return "%s" % (self.user_api.first_name or self.token if self.user_api else self.token)
-            
+
     def handle(self, update):
         handlerconf = settings.TELEGRAM_BOT_HANDLERS_CONF
         resolver = HandlerResolver(handlerconf)
@@ -51,8 +51,8 @@ class Bot(models.Model):
             callback(self, update, **callback_kwargs)
 
     def send_message(self, chat_id, text, parse_mode=None, disable_web_page_preview=None, **kwargs):
-        self._bot.sendMessage(chat_id=chat_id, text=text, parse_mode=parse_mode, 
-                              disable_web_page_preview=disable_web_page_preview, **kwargs)        
+        self._bot.sendMessage(chat_id=chat_id, text=text, parse_mode=parse_mode,
+                              disable_web_page_preview=disable_web_page_preview, **kwargs)
 
 @receiver(post_save, sender=Bot)
 def set_api(sender, instance, **kwargs):
@@ -63,18 +63,18 @@ def set_api(sender, instance, **kwargs):
     url = None
     cert = None
     if instance.enabled:
-        webhook = reverse('telegrambot:webhook', kwargs={'token': instance.token})        
+        webhook = reverse('telegrambot:webhook', kwargs={'token': instance.token})
         from django.contrib.sites.models import Site
         current_site = Site.objects.get_current()
-        url = 'https://' + current_site.domain + webhook   
+        url = 'https://' + current_site.domain + webhook
     if instance.ssl_certificate:
         instance.ssl_certificate.open()
         cert = instance.ssl_certificate
 
-    instance._bot.setWebhook(webhook_url=url, 
+    instance._bot.setWebhook(webhook_url=url,
                              certificate=cert)
     logger.info("Success: Webhook url %s for bot %s set" % (url, str(instance)))
-    
+
     #  complete  Bot instance with api data
     if not instance.user_api:
         bot_api = instance._bot.getMe()

@@ -9,23 +9,23 @@ class UserSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = User
         fields = ('id', 'first_name', 'last_name', 'username')
-        
+
 class ChatSerializer(serializers.HyperlinkedModelSerializer):
     id = serializers.IntegerField()
 
     class Meta:
         model = Chat
         fields = ('id', 'type', 'title', 'username', 'first_name', 'last_name')
-        
+
 class TimestampField(serializers.Field):
 
     def to_internal_value(self, data):
         return datetime.fromtimestamp(data)
-    
+
     def to_representation(self, value):
         return int(time.mktime(value.timetuple()))
 
-        
+
 class MessageSerializer(serializers.HyperlinkedModelSerializer):
     message_id = serializers.IntegerField()
     # reserved word field 'from' changed dynamically
@@ -33,7 +33,7 @@ class MessageSerializer(serializers.HyperlinkedModelSerializer):
     chat = ChatSerializer(many=False)
     date = TimestampField()
     text = serializers.CharField(required=True)
-    
+
     def __init__(self, *args, **kwargs):
         super(MessageSerializer, self).__init__(*args, **kwargs)
         self.fields['from'] = self.fields['from_']
@@ -42,19 +42,19 @@ class MessageSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Message
         fields = ('message_id', 'from_', 'date', 'chat', 'text')
-        
+
 class UpdateSerializer(serializers.HyperlinkedModelSerializer):
     update_id = serializers.IntegerField()
     message = MessageSerializer(many=False)
-    
+
     class Meta:
         model = Update
         fields = ('update_id', 'message')
-        
+
     def create(self, validated_data):
         user, _ = User.objects.get_or_create(**validated_data['message']['from_user'])
-        
-        chat, created = Chat.objects.get_or_create(**validated_data['message']['chat'])        
+
+        chat, created = Chat.objects.get_or_create(**validated_data['message']['chat'])
 
         # Associate chat to token if comes /start with token
         splitted_message = validated_data['message']['text'].split(' ')
@@ -65,8 +65,8 @@ class UpdateSerializer(serializers.HyperlinkedModelSerializer):
                 token.save()
             except AuthToken.DoesNotExist:
                 #  Do not associate with any token
-                pass                
-        
+                pass
+
         message, _ = Message.objects.get_or_create(message_id=validated_data['message']['message_id'],
                                                    from_user=user,
                                                    date=validated_data['message']['date'],

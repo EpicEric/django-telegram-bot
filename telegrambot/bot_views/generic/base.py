@@ -10,6 +10,7 @@ PY3 = sys.version_info > (3,)
 class TemplateCommandView(object):
     template_text = None
     template_keyboard = None
+    parse_mode = ParseMode.MARKDOWN
 
     def get_context(self, bot, update, **kwargs):
         return None
@@ -24,7 +25,7 @@ class TemplateCommandView(object):
             if text:
                 if not PY3:
                     text = text.encode('utf-8')
-                bot.send_message(chat_id=update.message.chat_id, text=text, reply_markup=keyboard, parse_mode=ParseMode.MARKDOWN)
+                bot.send_message(chat_id=update.message.chat_id, text=text, reply_markup=keyboard, parse_mode=self.parse_mode)
             else:
                 logger.info("No text response for update %s" % str(update))
         except:

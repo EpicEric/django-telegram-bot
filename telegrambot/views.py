@@ -29,7 +29,7 @@ class WebhookView(APIView):
                 logger.error("Error processing %s for token %s" % (request.data, token))
                 return Response(serializer.errors, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
             else:
-                return Response(serializer.data, status=status.HTTP_200_OK)
+                return Response(data=None, status=status.HTTP_200_OK)
         logger.error("Validation error: %s from message %s" % (serializer.errors, request.data))
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 

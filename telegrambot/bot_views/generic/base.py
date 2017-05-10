@@ -7,7 +7,23 @@ import logging
 logger = logging.getLogger(__name__)
 PY3 = sys.version_info > (3,)
 
-class TemplateCommandView(object):
+
+class NoResponseCommandView(object):
+    def perform_action(self, bot, update, **kwargs):
+        pass
+
+    def handle(self, bot, update, **kwargs):
+        self.perform_action(bot, update, **kwargs)
+
+    @classmethod
+    def as_command_view(cls, **initkwargs):
+        def view(bot, update, **kwargs):
+            self = cls(**initkwargs)
+            return self.handle(bot, update, **kwargs)
+        return view
+
+
+class TemplateCommandView(NoResponseCommandView):
     template_text = None
     template_keyboard = None
     parse_mode = ParseMode.MARKDOWN
@@ -32,10 +48,3 @@ class TemplateCommandView(object):
             exc_info = sys.exc_info()
             traceback.print_exception(*exc_info)
             raise
-
-    @classmethod
-    def as_command_view(cls, **initkwargs):
-        def view(bot, update, **kwargs):
-            self = cls(**initkwargs)
-            return self.handle(bot, update, **kwargs)
-        return view

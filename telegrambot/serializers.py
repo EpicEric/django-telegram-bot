@@ -61,8 +61,10 @@ class UpdateSerializer(serializers.HyperlinkedModelSerializer):
         if len(splitted_message) > 1 and splitted_message[0] == '/start':
             try:
                 token = AuthToken.objects.get(key=splitted_message[1])
-                token.chat_api = chat
-                token.save()
+                # todo: Show user the error
+                if not token.expired():
+                    token.chat_api = chat
+                    token.save()
             except AuthToken.DoesNotExist:
                 #  Do not associate with any token
                 pass

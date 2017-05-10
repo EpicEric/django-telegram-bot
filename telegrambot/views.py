@@ -47,8 +47,4 @@ class AuthView(generic.TemplateView):
         return Bot.objects.get(user_api__username=name)
 
     def get_token(self, user):
-        token, created = AuthToken.objects.get_or_create(user=user)
-        if not created and token.expired():
-            token.delete()
-            token = AuthToken.objects.create(user=user)
-        return token
+        return AuthToken.get_for_user(user=user)

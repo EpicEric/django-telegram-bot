@@ -270,7 +270,7 @@ class TestAuthView(testcases.BaseTestBot):
         with mock.patch("telegram.bot.Bot.setWebhook", callable=mock.MagicMock()):
             self.bot.save()
         user = ModelUser.objects.create_user(**self.user_args)
-        token = AuthToken.objects.create(user=user)
+        token = AuthToken.get_for_user(user=user)
         self.assertTrue(token.expired())
         self.client.login(username=self.user_args['username'], password=self.user_args['password'])
         self.client.get(self.auth_url)
@@ -283,7 +283,7 @@ class TestAuthView(testcases.BaseTestBot):
         with mock.patch("telegram.bot.Bot.setWebhook", callable=mock.MagicMock()):
             self.bot.save()
         user = ModelUser.objects.create_user(**self.user_args)
-        token = AuthToken.objects.create(user=user)
+        token = AuthToken.get_for_user(user=user)
         start_authenticated = {'in': '/start %s' % token.key,
                                'out': {'parse_mode': 'Markdown',
                                        'reply_markup': '',

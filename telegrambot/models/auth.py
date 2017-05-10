@@ -22,17 +22,25 @@ class AuthToken(models.Model):
                                 on_delete=models.CASCADE)
     chat_api = models.OneToOneField(Chat, related_name='auth_token',
                                     on_delete=models.CASCADE, blank=True, null=True)
-    created = models.DateTimeField(auto_now_add=True)
+    created = models.DateTimeField(auto_now=True)
 
     class Meta:
         verbose_name = _('Authentication Token')
         verbose_name_plural = _('Authentications Tokens')
 
-    def save(self, *args, **kwargs):
-        if not self.key:
-            self.key = self.generate_key()
-        return super(AuthToken, self).save(*args, **kwargs)
+    @classmethod
+    def get_for_user(cls, user):
+        try:
+            # todo: use token 1 time only
+            # store user in chat
+            token = AuthToken.objects.get(user=user)
+        except AuthToken.DoesNotExist:
+            token = AuthToken(user=user)
+            token.key = AuthToken.generate_key()
+        token.save()
+        return token
 
+    @classmethod
     def generate_key(self):
         return binascii.hexlify(os.urandom(20)).decode()
 

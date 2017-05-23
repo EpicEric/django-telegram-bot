@@ -26,7 +26,8 @@ class TemplateResponse(object):
             logger.debug("Template not found: %s" % self.template_name)
             return None
         # TODO: Avoid using a null HttRequest to context processors
-        ctx = RequestContext(HttpRequest(), self.ctx)
+        #ctx = RequestContext(HttpRequest(), self.ctx)
+        ctx = RequestContext(HttpRequest(), self.ctx).flatten()
         return template.render(ctx)
 
 class TextResponse(TemplateResponse):

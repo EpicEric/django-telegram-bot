@@ -1,4 +1,6 @@
+import re
 from django import template
+from django.template.defaultfilters import stringfilter
 from django.http import QueryDict
 register = template.Library()
 
@@ -18,3 +20,15 @@ def keyboard_field(value, args=None):
     for line in grouped:
         new_list.append([convert(e) for e in line])
     return str(new_list).encode('utf-8')
+
+@register.filter(name='escape_markdown')
+@stringfilter
+def escape_markdown(string):
+    """
+    Escape Markdown from a string
+    """
+    return re.sub(
+        r'([*_`\[])',
+        r'\\\g<1>',
+        string
+    ).encode('utf-8')

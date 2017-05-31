@@ -27,6 +27,7 @@ class TemplateCommandView(NoResponseCommandView):
     template_text = None
     template_keyboard = None
     parse_mode = ParseMode.MARKDOWN
+    disable_web_page_preview = False
 
     def get_context(self, bot, update, **kwargs):
         return None
@@ -41,7 +42,7 @@ class TemplateCommandView(NoResponseCommandView):
             if text:
                 if not PY3:
                     text = text.encode('utf-8')
-                bot.send_message(chat_id=update.message.chat_id, text=text, reply_markup=keyboard, parse_mode=self.parse_mode)
+                bot.send_message(chat_id=update.message.chat_id, text=text, reply_markup=keyboard, parse_mode=self.parse_mode, disable_web_page_preview=self.disable_web_page_preview)
             else:
                 logger.info("No text response for update %s" % str(update))
         except:
